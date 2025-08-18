@@ -1,0 +1,62 @@
+
+syntax = "proto3";
+
+option go_package = "./protobuf/wallet";
+package dapp.wallet;
+
+enum ReturnCode {
+  ERROR = 0;
+  SUCCESS = 1;
+}
+
+message PublicKey {
+  string compress_pubkey =1;
+  string pubkey = 2;
+}
+
+message SupportSignWayRequest {
+  string consumer_token = 1;
+}
+
+message SupportSignWayResponse {
+  ReturnCode code = 1;
+  string msg = 2;
+  repeated SignWay sign_way = 3;
+}
+
+message SignWay {
+  string schema = 1;
+}
+
+message ExportPublicKeyRequest {
+  string consumer_token = 1;
+  // CryptoType 加密类型
+  string type = 2;
+  uint64 number = 3;
+}
+
+message ExportPublicKeyResponse {
+  ReturnCode code = 1;
+  string msg = 2;
+  repeated PublicKey public_key = 3;
+}
+
+message SignTxMessageRequest {
+  string consumer_token = 1;
+  // CryptoType 加密类型
+  string type = 2;
+  string public_key = 3;
+  string message_hash = 4;
+}
+
+message SignTxMessageResponse {
+  ReturnCode code = 1;
+  string msg = 2;
+  string signature = 3;
+}
+
+service WalletService {
+  rpc getSupportSignWay(SupportSignWayRequest) returns (SupportSignWayResponse) {}
+  rpc exportPublicKeyList(ExportPublicKeyRequest) returns (ExportPublicKeyResponse) {}
+  rpc signTxMessage(SignTxMessageRequest) returns (SignTxMessageResponse) {}
+}
